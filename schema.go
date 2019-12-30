@@ -28,6 +28,7 @@ package gojsonschema
 
 import (
 	"errors"
+	"fmt"
 	"math/big"
 	"reflect"
 	"regexp"
@@ -654,12 +655,14 @@ func (d *Schema) parseSchema(documentNode interface{}, currentSchema *subSchema)
 		if isKind(m[KEY_PATTERN], reflect.String) {
 			regexpObject, err := regexp.Compile(m[KEY_PATTERN].(string))
 			if err != nil {
-				return errors.New(formatErrorDescription(
+				err = errors.New(formatErrorDescription(
 					Locale.MustBeValidRegex(),
 					ErrorDetails{"key": KEY_PATTERN},
 				))
+				fmt.Printf("warning: %v %q in document %v :: continuing, but not including\n", err, m[KEY_PATTERN].(string), currentSchema.id)
+			} else {
+				currentSchema.pattern = regexpObject
 			}
-			currentSchema.pattern = regexpObject
 		} else {
 			return errors.New(formatErrorDescription(
 				Locale.MustBeOfA(),
