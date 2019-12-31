@@ -31,17 +31,17 @@ import (
 	"strings"
 )
 
-type jsonSchemaType struct {
+type JsonSchemaType struct {
 	types []string
 }
 
 // Is the schema typed ? that is containing at least one type
 // When not typed, the schema does not need any type validation
-func (t *jsonSchemaType) IsTyped() bool {
+func (t *JsonSchemaType) IsTyped() bool {
 	return len(t.types) > 0
 }
 
-func (t *jsonSchemaType) Add(etype string) error {
+func (t *JsonSchemaType) Add(etype string) error {
 
 	if !isStringInSlice(JSON_TYPES, etype) {
 		return errors.New(formatErrorDescription(Locale.NotAValidType(), ErrorDetails{"given": "/" + etype + "/", "expected": JSON_TYPES}))
@@ -56,7 +56,7 @@ func (t *jsonSchemaType) Add(etype string) error {
 	return nil
 }
 
-func (t *jsonSchemaType) Contains(etype string) bool {
+func (t *JsonSchemaType) Contains(etype string) bool {
 
 	for _, v := range t.types {
 		if v == etype {
@@ -67,7 +67,7 @@ func (t *jsonSchemaType) Contains(etype string) bool {
 	return false
 }
 
-func (t *jsonSchemaType) String() string {
+func (t *JsonSchemaType) String() string {
 
 	if len(t.types) == 0 {
 		return STRING_UNDEFINED // should never happen
